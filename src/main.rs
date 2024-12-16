@@ -1,11 +1,11 @@
 use std::env;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 struct ConfigInit {
     c: String,
     p: String,
-    video: String
+    video: PathBuf
 }
 
 fn main() {
@@ -13,7 +13,7 @@ fn main() {
     let mut config = ConfigInit {
         c: String::from("28"),
         p: String::from("medium"),
-        video: String::from("INVALID"),
+        video: PathBuf::from("INVALID"),
     };
 
     let args: Vec<String> = env::args().collect();
@@ -24,21 +24,29 @@ fn main() {
         match flag.to_lowercase().as_str() {
             "-c" | "-p" => {handle_args(&mut config, &flag, args_iter.next() );},
             _ => {
-                if is_video(flag) {
-                    config.video = flag.to_string();
-                } else {
-                    println!("Error: Invalid path or not a video \"{}\"", flag);
+                match is_video(flag) {
+                    Some(var) => config.video = var,
+                    _ => println!("Error: Invalid path or not a video \"{}\"", flag)
                 }
             }
         }
     }
 
-    println!("\nConfig: C: {}, P: {} \nVideo: {}", config.c, config.p, config.video);
+    println!("\nConfig: C: {}, P: {} \nVideo: {}", config.c, config.p, config.video.display());
+
+    let output_path = config.video.with_file_name(format!(
+        "{}-output.{}",
+        config.video.file_stem().unwrap().to_str().unwrap(),
+        config.video.extension().unwrap().to_str().unwrap()
+    ));
 
     let execute = {
         Command::new("sh")
             .arg("-c")
-            .arg(format!("ffmpeg -i \"{}\" -vcodec libx264 -crf {} -preset {} -acodec aac -b:a 128k {}-output.mp4", &config.video, &config.c, &config.p, &config.video))
+            .arg(format!(
+                "ffmpeg -i \"{}\" -vcodec libx264 -crf {} -preset {} -acodec aac -b:a 128k -y \"{}\"",
+                &config.video.display(), &config.c, &config.p, &output_path.display()
+            ))
             .output()
             .expect("Failed to execute ffmpeg.")
     };
@@ -50,8 +58,6 @@ fn main() {
     );
 
     println!("Execution: \n{}", output);
-
-    // let command = String::from("ffmpeg -i input.mp4 -vcodec libx264 -crf 23 -preset medium output.mp4");
 }
 
 fn handle_args(config: &mut ConfigInit, flag: &str, args_iter: Option<&String>) {
@@ -83,17 +89,17 @@ fn handle_args(config: &mut ConfigInit, flag: &str, args_iter: Option<&String>) 
     }
 }
 
-fn is_video(path_str: &str) -> bool {
+fn is_video(path_str: &str) -> Option<PathBuf> {
     let video_extensions: [&str; 7] = ["mp4", "avi", "mkv", "mov", "flv", "wmv", "webm"];
     let path = Path::new(path_str);
-    let extension = path.extension().and_then(|ext| ext.to_str());
 
-    if !path.exists() || !path.is_file() {
-        return false;
+    if path.exists() && path.is_file() {
+        if let Some(extension) = path.extension().and_then(|ext| ext.to_str()) {
+            if video_extensions.contains(&extension.to_lowercase().as_str()) {
+                return Some(path.to_path_buf());
+            }
+        }
     }
 
-    match extension {
-        Some(file_ext) => video_extensions.contains(&file_ext.to_lowercase().as_str()),
-        None => false,
-    }
+    None
 }
