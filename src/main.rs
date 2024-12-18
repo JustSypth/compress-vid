@@ -11,7 +11,7 @@ struct ConfigInit {
 fn main() {
     // Default values for the command
     let mut config = ConfigInit {
-        c: String::from("28"),
+        c: String::from("32"),
         p: String::from("medium"),
         video: PathBuf::from("INVALID"),
     };
@@ -26,7 +26,10 @@ fn main() {
             _ => {
                 match is_video(flag) {
                     Some(var) => config.video = var,
-                    _ => println!("Error: Invalid path or not a video \"{}\"", flag)
+                    _ => {
+                        eprintln!("Error: Invalid path or not a video \"{}\"", flag);
+                        std::process::exit(1);
+                    }
                 }
             }
         }
@@ -34,6 +37,7 @@ fn main() {
 
     println!("\nConfig: C: {}, P: {} \nVideo: {}", config.c, config.p, config.video.display());
 
+    // Add "-output" to output filename
     let output_path = config.video.with_file_name(format!(
         "{}-output.{}",
         config.video.file_stem().unwrap().to_str().unwrap(),
@@ -50,7 +54,7 @@ fn main() {
             .output()
             .expect("Failed to execute ffmpeg.")
     };
-
+    
     let output = format!(
         "Standard Output:\n{}\nStandard Error:\n{}",
         String::from_utf8_lossy(&execute.stdout),
@@ -82,10 +86,14 @@ fn handle_args(config: &mut ConfigInit, flag: &str, args_iter: Option<&String>) 
             // If value is a file
             else {
                 eprintln!("Argument after {} should not be a file!", flag);
+                std::process::exit(1);
             }
         }
         // If a flag doesn't have a value
-        None => eprintln!("Missing argument after {}", flag),
+        None => {
+            eprintln!("Missing argument after {}", flag);
+            std::process::exit(1);
+        },
     }
 }
 
