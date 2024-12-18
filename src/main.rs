@@ -65,31 +65,39 @@ fn main() {
 }
 
 fn handle_args(config: &mut ConfigInit, flag: &str, args_iter: Option<&String>) {
-    //Checks if there's a value after a flag
     match args_iter {
-        //If a flag has value
-        Some(value) => {
 
-            let path = Path::new(value);
-            // If value isn't a file
-            if !path.exists() || !path.is_file() {
-                match flag {
-                    "-c" => {
-                        config.c = value.to_string();
-                    },
-                    "-p" => {
+        Some(value) => {
+            match flag {
+                "-c" => {
+                    if let Ok(num) = value.parse::<u32>() {
+                        if (1..=100).contains(&num) {
+                            config.c = num.to_string();
+                        } else {
+                            eprintln!("Error: Compress value must be between 1-100!");
+                            std::process::exit(1);
+                        }
+                    } else {
+                        eprintln!("Error: Compress value must be a number (1-100)!");
+                        std::process::exit(1);
+                    }
+                },
+                "-p" => {
+                    let allowed_strings: [&str; 4] = ["ultrafast", "veryfast", "slow", "veryslow"];
+                    if allowed_strings.contains(&value.as_str()) {
                         config.p = value.to_string();
-                    },
-                    _ => (),
-                }
-            }
-            // If value is a file
-            else {
-                eprintln!("Argument after {} should not be a file!", flag);
-                std::process::exit(1);
+                    } else {
+                        eprintln!(
+                            "Error: Invalid preset (-p) \nList of valid presets: {}",
+                            allowed_strings.join(", ")
+                        );
+                        std::process::exit(1);
+                    }
+                },
+                _ => (),
             }
         }
-        // If a flag doesn't have a value
+
         None => {
             eprintln!("Missing argument after {}", flag);
             std::process::exit(1);
