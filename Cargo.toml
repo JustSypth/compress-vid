@@ -1,6 +1,6 @@
 [package]
 name = "compress-vid"
-description = "A ffmpeg frontend for compressing videos with more ease."
+description = "A ffmpeg wrapper for compressing videos with more ease."
 version = "0.2.2"
 edition = "2021"
 authors = ["JustSypth"]
