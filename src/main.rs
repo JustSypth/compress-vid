@@ -50,7 +50,7 @@ fn main() {
     ));
 
     let execute_arg = format!(
-        "ffmpeg -i \"{}\" -vcodec libx264 -crf {} -preset {} -acodec aac -b:a 128k -y \"{}\"",
+        "ffmpeg -i '{}' -vcodec libx264 -crf {} -preset {} -acodec aac -b:a 128k -y '{}'",
         &config.video.display(),
         &config.c,
         &config.p,
