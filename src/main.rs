@@ -1,5 +1,5 @@
-mod execute;
 mod args;
+mod execute;
 
 use std::env;
 use std::path::PathBuf;
@@ -45,8 +45,5 @@ fn main() {
     );
 
     let output = execute::execute(&config);
-    
-    println!("Execution: \n{}", output);
+    println!("{output}");
 }
-
-

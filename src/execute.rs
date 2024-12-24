@@ -32,13 +32,11 @@ pub fn execute(config: &ConfigInit) -> String {
             .expect("Failed to execute ffmpeg.")
     };
 
-    let output = format!(
-        "Standard Output:\n{}\nStandard Error:\n{}",
-        String::from_utf8_lossy(&execute.stdout),
-        String::from_utf8_lossy(&execute.stderr)
-    );
+    let output = if execute.status.success() {
+        "Process completed successfully".to_string()
+    } else {
+        format!("Process failed with status: {}", execute.status)
+    };
 
-    return output;
-
+    output
 }
-
