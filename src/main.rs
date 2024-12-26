@@ -57,7 +57,7 @@ fn handle_args(config: &mut ConfigInit) {
     while let Some(flag) = args_iter.next() {
         match flag.to_lowercase().as_str() {
             "-h" => cli::print_help(),
-            "-c" => args::compress(config, &flag, args_iter.next()),
+            "-c" => args::compress(config, flag, args_iter.next()),
             "-p" => args::preset(config, flag, args_iter.next()),
             _ => {
                 if args::is_video(flag) {
