@@ -11,6 +11,8 @@ pub struct ConfigInit {
 }
 
 impl ConfigInit {
+
+
     fn has_video(&self) -> bool {
         args::is_video(self.video.to_str().unwrap_or(""))
     }
@@ -24,25 +26,7 @@ fn main() {
         video: PathBuf::from("INVALID"),
     };
 
-    let args: Vec<String> = env::args().collect();
-    let mut args_iter = args.iter().skip(1);
-
-    // Loop through args and check if it's a flag or vid
-    while let Some(flag) = args_iter.next() {
-        match flag.to_lowercase().as_str() {
-            "-c" | "-p" => {
-                args::handle_args(&mut config, &flag, args_iter.next());
-            }
-            _ => {
-                if args::is_video(flag) {
-                    config.video = PathBuf::from(flag);
-                } else {
-                    eprintln!("Error: Invalid path or not a video \"{}\"", flag);
-                    std::process::exit(1);
-                }
-            }
-        }
-    }
+    handle_args(&mut config);
 
     // DEBUG
     println!(
@@ -55,11 +39,31 @@ fn main() {
     if config.has_video() {
         let output = execute::execute(&config);
         println!("{output}");
-    }
-    else {
+    } else {
         eprintln!("Error: Missing a video");
         std::process::exit(1);
     }
+}
 
-    
+fn handle_args(config: &mut ConfigInit) {
+
+    let args: Vec<String> = env::args().collect();
+    let mut args_iter = args.iter().skip(1);
+
+    // Loop through args and check if it's a flag or vid
+    while let Some(flag) = args_iter.next() {
+        match flag.to_lowercase().as_str() {
+            "-c" => args::compress(config, &flag, args_iter.next()),
+            "-p" => args::preset(config, flag, args_iter.next()),
+            _ => {
+                if args::is_video(flag) {
+                    config.video = PathBuf::from(flag);
+                } else {
+                    eprintln!("Error: Invalid path or not a video \"{}\"", flag);
+                    std::process::exit(1);
+                }
+            }
+        }
+    }
+
 }
