@@ -33,7 +33,7 @@ pub fn preset(config: &mut ConfigInit, flag: &str, value: Option<&String>) {
                 config.p = value.to_string();
             } else {
                 eprintln!(
-                    "Error: Invalid preset (-p) \nList of valid presets: {}",
+                    "Error: Invalid preset \nList of valid presets: {}",
                     allowed_strings.join(", ")
                 );
                 std::process::exit(1);
