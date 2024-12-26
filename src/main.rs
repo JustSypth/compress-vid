@@ -31,14 +31,6 @@ fn main() {
 
     handle_args(&mut config);
 
-    // DEBUG
-    println!(
-        "\nConfig: C: {}, P: {} \nVideo: {}\n",
-        config.c,
-        config.p,
-        config.video.display()
-    );
-
     if config.has_video() {
         let output = execute::execute(&config);
         println!("{output}");
