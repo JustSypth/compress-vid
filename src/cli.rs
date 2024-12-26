@@ -1,5 +1,7 @@
 use std::env;
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 pub fn print_help() {
     //.next() here doesnt actually skip index 0 but starts at index 0
     let program_name = env::args().next().unwrap_or_else(|| "program".to_string());
@@ -26,5 +28,10 @@ pub fn print_help() {
         println!("  {:<25} {}", arg, desc);
     }
 
+    std::process::exit(0);
+}
+
+pub fn version() {
+    println!("Version: {}", VERSION);
     std::process::exit(0);
 }

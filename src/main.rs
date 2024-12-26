@@ -57,6 +57,7 @@ fn handle_args(config: &mut ConfigInit) {
     while let Some(flag) = args_iter.next() {
         match flag.to_lowercase().as_str() {
             "-h" => cli::print_help(),
+            "--version" => cli::version(),
             "-c" => args::compress(config, flag, args_iter.next()),
             "-p" => args::preset(config, flag, args_iter.next()),
             _ => {
