@@ -60,6 +60,9 @@ fn handle_args(config: &mut ConfigInit) {
             _ => {
                 if args::is_video(flag) {
                     config.video = PathBuf::from(flag);
+                } else if flag.starts_with("-") {
+                    eprintln!("Error: Invalid flag \"{}\"", flag);
+                    std::process::exit(1);
                 } else {
                     eprintln!("Error: Invalid path or not a video \"{}\"", flag);
                     std::process::exit(1);
