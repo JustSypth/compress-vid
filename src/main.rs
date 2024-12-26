@@ -1,5 +1,6 @@
 mod args;
 mod execute;
+mod cli;
 
 use std::env;
 use std::path::PathBuf;
@@ -55,6 +56,7 @@ fn handle_args(config: &mut ConfigInit) {
     // Loop through args and check if it's a flag or vid
     while let Some(flag) = args_iter.next() {
         match flag.to_lowercase().as_str() {
+            "-h" => cli::print_help(),
             "-c" => args::compress(config, &flag, args_iter.next()),
             "-p" => args::preset(config, flag, args_iter.next()),
             _ => {
