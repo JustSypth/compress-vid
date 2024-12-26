@@ -11,7 +11,13 @@ pub struct ConfigInit {
 }
 
 impl ConfigInit {
-
+    fn new() -> Self {
+        Self {
+            c: String::from("32"),
+            p: String::from("medium"),
+            video: PathBuf::from("INVALID"),
+        }
+    }
 
     fn has_video(&self) -> bool {
         args::is_video(self.video.to_str().unwrap_or(""))
@@ -20,11 +26,7 @@ impl ConfigInit {
 
 fn main() {
     // Default values for the command
-    let mut config = ConfigInit {
-        c: String::from("32"),
-        p: String::from("medium"),
-        video: PathBuf::from("INVALID"),
-    };
+    let mut config = ConfigInit::new();
 
     handle_args(&mut config);
 
