@@ -6,14 +6,14 @@ pub fn compress(config: &mut ConfigInit, flag: &str, value: Option<&String>) {
     match value {
         Some(value) => {
             if let Ok(num) = value.parse::<u32>() {
-                if (1..=100).contains(&num) {
+                if (1..=51).contains(&num) {
                     config.c = num.to_string();
                 } else {
-                    eprintln!("Error: Compress value must be between 1-100!");
+                    eprintln!("Error: Compress value must be between 1-51!");
                     std::process::exit(1);
                 }
             } else {
-                eprintln!("Error: Compress value must be a number (1-100)!");
+                eprintln!("Error: Compress value must be a number (1-51)!");
                 std::process::exit(1);
             }
         },
