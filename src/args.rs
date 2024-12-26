@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use crate::ConfigInit;
 
@@ -40,17 +40,15 @@ pub fn handle_args(config: &mut ConfigInit, flag: &str, args_iter: Option<&Strin
     }
 }
 
-pub fn is_video(path_str: &str) -> Option<PathBuf> {
+pub fn is_video(path_str: &str) -> bool {
     let video_extensions: [&str; 7] = ["mp4", "avi", "mkv", "mov", "flv", "wmv", "webm"];
     let path = Path::new(path_str);
 
     if path.exists() && path.is_file() {
-        if let Some(extension) = path.extension().and_then(|ext| ext.to_str()) {
-            if video_extensions.contains(&extension.to_lowercase().as_str()) {
-                return Some(path.to_path_buf());
-            }
+        if let Some(extension) = path.extension().and_then(|ext| ext.to_str()) { //whether the file even has an extension
+            return video_extensions.contains(&extension.to_lowercase().as_str()); //whether the file has a vid extension
         }
     }
 
-    None
+    false
 }

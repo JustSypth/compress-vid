@@ -10,6 +10,12 @@ pub struct ConfigInit {
     video: PathBuf,
 }
 
+impl ConfigInit {
+    fn has_video(&self) -> bool {
+        args::is_video(self.video.to_str().unwrap_or(""))
+    }
+}
+
 fn main() {
     // Default values for the command
     let mut config = ConfigInit {
@@ -27,23 +33,33 @@ fn main() {
             "-c" | "-p" => {
                 args::handle_args(&mut config, &flag, args_iter.next());
             }
-            _ => match args::is_video(flag) {
-                Some(var) => config.video = var,
-                _ => {
+            _ => {
+                if args::is_video(flag) {
+                    config.video = PathBuf::from(flag);
+                } else {
                     eprintln!("Error: Invalid path or not a video \"{}\"", flag);
                     std::process::exit(1);
                 }
-            },
+            }
         }
     }
 
+    // DEBUG
     println!(
-        "\nConfig: C: {}, P: {} \nVideo: {}",
+        "\nConfig: C: {}, P: {} \nVideo: {}\n",
         config.c,
         config.p,
         config.video.display()
     );
 
-    let output = execute::execute(&config);
-    println!("{output}");
+    if config.has_video() {
+        let output = execute::execute(&config);
+        println!("{output}");
+    }
+    else {
+        eprintln!("Error: Missing a video");
+        std::process::exit(1);
+    }
+
+    
 }
