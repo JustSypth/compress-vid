@@ -32,6 +32,6 @@ pub fn print_help() {
 }
 
 pub fn version() {
-    println!("Version: {}", VERSION);
+    println!("compress-vid {}", VERSION);
     std::process::exit(0);
 }
