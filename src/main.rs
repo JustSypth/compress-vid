@@ -36,7 +36,7 @@ fn main() {
         // run command
         if debug::get() {
             cli::debug(&config);
-            let output = execute::execute(&config);
+            let output = execute::debug(&config);
             println!("{output}");
         } else {
             let output = execute::execute(&config);
