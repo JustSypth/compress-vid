@@ -55,7 +55,7 @@ fn handle_args(config: &mut ConfigInit) {
     // Loop through args and check if it's a flag or vid
     while let Some(flag) = args_iter.next() {
         match flag.to_lowercase().as_str() {
-            "--help" | "-h" => cli::print_help(),
+            "--help" | "-h" => cli::help(),
             "--version" => cli::version(),
             "--debug" => debug::set(),
             "-c" | "--crf" => args::compress(config, flag, args_iter.next()),
