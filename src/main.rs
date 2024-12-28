@@ -23,30 +23,27 @@ impl ConfigInit {
         }
     }
 
-    fn has_video(&self) -> bool {
-        args::is_video(self.video.to_str().unwrap_or(""))
+    fn run(&self) {
+        if !args::is_video(self.video.to_str().unwrap_or("")) {
+            println!("Error: Missing a video");
+            std::process::exit(1);
+        }
+
+        if self.debug {
+            cli::debug(&self);
+            let output = execute::debug(&self);
+            println!("{output}");
+        } else {
+            let output = execute::execute(&self);
+            println!("{output}");
+        }
     }
 }
 
 fn main() {
     let mut config = ConfigInit::new();
-
     handle_args(&mut config);
-
-    if !config.has_video() {
-        eprintln!("Error: Missing a video");
-        std::process::exit(1);
-    }
-
-    if config.debug {
-        cli::debug(&config);
-        let output = execute::debug(&config);
-        println!("{output}");
-    } else {
-        let output = execute::execute(&config);
-        println!("{output}");
-    }
-    
+    config.run();
 }
 
 fn handle_args(config: &mut ConfigInit) {
