@@ -1,6 +1,5 @@
 mod args;
 mod cli;
-mod debug;
 mod execute;
 
 use std::env;
@@ -11,6 +10,7 @@ pub struct ConfigInit {
     c: String,
     p: String,
     video: PathBuf,
+    debug: bool,
 }
 
 impl ConfigInit {
@@ -19,6 +19,7 @@ impl ConfigInit {
             c: String::from("32"),
             p: String::from("medium"),
             video: PathBuf::from("INVALID"),
+            debug: false,
         }
     }
 
@@ -37,7 +38,7 @@ fn main() {
         std::process::exit(1);
     }
 
-    if debug::get() {
+    if config.debug {
         cli::debug(&config);
         let output = execute::debug(&config);
         println!("{output}");
@@ -57,7 +58,7 @@ fn handle_args(config: &mut ConfigInit) {
         match flag.to_lowercase().as_str() {
             "--help" | "-h" => cli::help(),
             "--version" => cli::version(),
-            "--debug" => debug::set(),
+            "--debug" => config.debug = true,
             "-c" | "--crf" => args::compress(config, flag, args_iter.next()),
             "-p" | "--preset" => args::preset(config, flag, args_iter.next()),
             _ => {
