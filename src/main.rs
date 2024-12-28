@@ -1,10 +1,12 @@
 mod args;
-mod execute;
 mod cli;
+mod debug;
+mod execute;
 
 use std::env;
 use std::path::PathBuf;
 
+#[derive(Debug)]
 pub struct ConfigInit {
     c: String,
     p: String,
@@ -26,22 +28,28 @@ impl ConfigInit {
 }
 
 fn main() {
-    // Default values for the command
     let mut config = ConfigInit::new();
 
     handle_args(&mut config);
 
     if config.has_video() {
-        let output = execute::execute(&config);
-        println!("{output}");
+        // run command
+        if debug::get() {
+            cli::debug(&config);
+            let output = execute::execute(&config);
+            println!("{output}");
+        } else {
+            let output = execute::execute(&config);
+            println!("{output}");
+        }
     } else {
         eprintln!("Error: Missing a video");
         std::process::exit(1);
     }
+    
 }
 
 fn handle_args(config: &mut ConfigInit) {
-
     let args: Vec<String> = env::args().collect();
     let mut args_iter = args.iter().skip(1);
 
@@ -50,6 +58,7 @@ fn handle_args(config: &mut ConfigInit) {
         match flag.to_lowercase().as_str() {
             "--help" | "-h" => cli::print_help(),
             "--version" => cli::version(),
+            "--debug" => debug::set(),
             "-c" | "--crf" => args::compress(config, flag, args_iter.next()),
             "-p" | "--preset" => args::preset(config, flag, args_iter.next()),
             _ => {
@@ -65,5 +74,4 @@ fn handle_args(config: &mut ConfigInit) {
             }
         }
     }
-
 }

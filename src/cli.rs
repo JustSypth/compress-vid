@@ -1,5 +1,7 @@
 use std::env;
 
+use crate::ConfigInit;
+
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub fn print_help() {
@@ -34,4 +36,11 @@ pub fn print_help() {
 pub fn version() {
     println!("compress-vid {}", VERSION);
     std::process::exit(0);
+}
+
+pub fn debug(config: &ConfigInit) {
+    println!(
+        "Crf: {}, Preset: {}\nVideo: {}", 
+        config.c, config.p, config.video.display()
+    );
 }
