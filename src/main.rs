@@ -32,19 +32,18 @@ fn main() {
 
     handle_args(&mut config);
 
-    if config.has_video() {
-        // run command
-        if debug::get() {
-            cli::debug(&config);
-            let output = execute::debug(&config);
-            println!("{output}");
-        } else {
-            let output = execute::execute(&config);
-            println!("{output}");
-        }
-    } else {
+    if !config.has_video() {
         eprintln!("Error: Missing a video");
         std::process::exit(1);
+    }
+
+    if debug::get() {
+        cli::debug(&config);
+        let output = execute::debug(&config);
+        println!("{output}");
+    } else {
+        let output = execute::execute(&config);
+        println!("{output}");
     }
     
 }
