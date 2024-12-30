@@ -22,19 +22,11 @@ fn get_ffmpeg_command(config: &ConfigInit, output_path: &PathBuf) -> String {
 }
 
 fn run_command(execute_arg: &str) -> std::process::Output {
-    if cfg!(target_os = "windows") {
-        Command::new("cmd")
-            .arg("/C")
-            .arg(execute_arg)
-            .output()
-            .expect("Failed to execute ffmpeg.")
-    } else {
-        Command::new("sh")
-            .arg("-c")
-            .arg(execute_arg)
-            .output()
-            .expect("Failed to execute ffmpeg.")
-    }
+    Command::new("sh")
+    .arg("-c")
+    .arg(execute_arg)
+    .output()
+    .expect("Failed to execute ffmpeg.")
 }
 
 pub fn execute(config: &ConfigInit) -> String {
