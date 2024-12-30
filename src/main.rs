@@ -31,12 +31,10 @@ impl ConfigInit {
 
         if self.debug {
             cli::debug(&self);
-            let output = execute::debug(&self);
-            println!("{output}");
-        } else {
-            let output = execute::execute(&self);
-            println!("{output}");
         }
+
+        let output = execute::run(&self);
+        println!("{output}");
     }
 }
 

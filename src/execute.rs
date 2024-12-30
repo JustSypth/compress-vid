@@ -29,30 +29,24 @@ fn run_command(execute_arg: &str) -> std::process::Output {
         .expect("Failed to execute ffmpeg.")
 }
 
-pub fn execute(config: &ConfigInit) -> String {
+pub fn run(config: &ConfigInit) -> String {
     let output_path = get_output_path(config);
     let execute_arg = get_ffmpeg_command(config, &output_path);
 
     println!("Processing file...");
     let execute = run_command(&execute_arg);
 
-    if execute.status.success() {
-        "Process completed successfully".to_string()
+    if config.debug {
+        format!(
+            "Standard Output:\n{}\nStandard Error:\n{}",
+            String::from_utf8_lossy(&execute.stdout),
+            String::from_utf8_lossy(&execute.stderr)
+        )
     } else {
-        format!("Process failed with status: {}", execute.status)
+        if execute.status.success() {
+            "Process completed successfully".to_string()
+        } else {
+            format!("Process failed with status: {}", execute.status)
+        }
     }
-}
-
-pub fn debug(config: &ConfigInit) -> String {
-    let output_path = get_output_path(config);
-    let execute_arg = get_ffmpeg_command(config, &output_path);
-
-    println!("Processing file...");
-    let execute = run_command(&execute_arg);
-
-    format!(
-        "Standard Output:\n{}\nStandard Error:\n{}",
-        String::from_utf8_lossy(&execute.stdout),
-        String::from_utf8_lossy(&execute.stderr)
-    )
 }
