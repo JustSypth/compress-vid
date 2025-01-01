@@ -8,8 +8,8 @@ pub fn help() {
     //.next() here doesnt actually skip index 0 but starts at index 0
     let program_name = env::args().next().unwrap_or_else(|| "program".to_string());
     
-    println!("Usage: {} [OPTION]... [FILE]...", program_name);
     println!("An ffmpeg wrapper for compressing videos with more ease.\n");
+    println!("Usage: {} [OPTION]... [FILE]...", program_name);
     
     // Main options
     let options = [
