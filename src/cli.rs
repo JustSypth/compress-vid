@@ -13,8 +13,8 @@ pub fn help() {
     
     // Main options
     let options = [
-        ("-c, --crf <0-51>", "Compression intensity (0 = lossless, 51 = worst quality)"),
-        ("-p, --preset <value>", "Encoding speed (ultrafast, veryfast, medium, slow, veryslow)"),
+        ("-c, --crf <0-51>", "Compression intensity (0 = lossless, 51 = worst quality) (default: 32)"),
+        ("-p, --preset <value>", "Encoding speed (ultrafast, veryfast, medium, slow, veryslow) (default: medium)"),
         ("    --help", "display this help and exit"),
         ("    --version", "output version information and exit (not yet implemented)"),
     ];
