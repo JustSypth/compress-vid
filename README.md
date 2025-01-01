@@ -8,19 +8,27 @@
 
 ## Usage:
 ### Example usage:
+Without specifying any arguments (defaults will be applied):
+```
+compress-vid [video]
+```
+With arguments:
+```
+compress-vid --crf 28 --preset medium [video]
+```
 
-    compress-vid --crf 28 --preset medium [video]
 
 ### Arguments:
 
-**-p / --preset:**
-    <br>Controls the speed of video encoding. (ultrafast, veryfast, medium, slow, veryslow)
-    <br>Slower presets produce better quality and smaller file sizes. Faster presets are quicker but result in larger files with lower quality.
+**-p / --preset:**  
+    Controls the speed of video encoding. (ultrafast, veryfast, medium, slow, veryslow)  
+    Slower presets produce better quality and smaller file sizes. Faster presets are quicker but result in larger files with lower quality.
 
-**-c / --crf:**
-    <br>The CRF (Constant Rate Factor) controls video quality. <small>*(Allowed values: 0-51)*</small>
-    <br>Lower values output higher quality and larger file sizes. Higher values output lower quality and smaller file sizes.
+**-c / --crf:**  
+    The CRF (Constant Rate Factor) controls video quality. <small>*(Allowed values: 0-51)*</small>  
+    Lower values output higher quality and larger file sizes. Higher values output lower quality and smaller file sizes.
 
 
+**--debug**  
+**--version**  
 **--help**
-<br>**--version**
