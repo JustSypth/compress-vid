@@ -1,5 +1,6 @@
 # Compress-vid
 ### An ffmpeg wrapper for compressing videos with more ease.
+### !! Working on a new GUI version which will be ported to Windows as well !!
 
 ## Installation:
 1. Download the latest release: [Download](https://github.com/JustSypth/compress-vid/releases/latest/download/compress-vid.tar)
